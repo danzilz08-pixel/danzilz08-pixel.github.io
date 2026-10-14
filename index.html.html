@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>지단의 집 | Pastel Vintage Archive</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: Arial, "Noto Sans KR", sans-serif;
+      background: #fff7e9;
+      color: #171717;
+      line-height: 1.6;
+    }
+    header {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 10;
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 20px 7%;
+      background: rgba(233,223,202,.91);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid rgba(0,0,0,.08);
+    }
+    .logo { font-weight: 900; letter-spacing: -1px; font-size: 20px; }
+    nav { display: flex; gap: 24px; }
+    nav a { color: inherit; text-decoration: none; font-size: 14px; font-weight: 700; }
+    nav a:hover { opacity: .55; }
+
+    .hero {
+      min-height: 100vh;
+      padding: 130px 7% 70px;
+      display: flex; flex-direction: column; justify-content: center;
+      position: relative; overflow: hidden;
+    }
+    .tag {
+      display: inline-block; width: fit-content;
+      border: 1px solid #171717; border-radius: 100px;
+      padding: 7px 14px; margin-bottom: 24px;
+      font-size: 13px; font-weight: 700;
+    }
+    h1 {
+      max-width: 1000px;
+      font-size: clamp(52px, 8vw, 116px);
+      line-height: .96; letter-spacing: -5px;
+    }
+    h1 em { font-style: normal; color: #d88ca4; }
+    .hero-copy {
+      margin-top: 34px; max-width: 550px;
+      font-size: 18px; color: #4d4d4d;
+    }
+    .scroll { position: absolute; right: 7%; bottom: 50px; font-size: 13px; transform: rotate(90deg); }
+
+    section { padding: 110px 7%; border-top: 1px solid rgba(0,0,0,.12); }
+    .section-label { font-size: 13px; font-weight: 800; margin-bottom: 30px; }
+    .about-grid { display: grid; grid-template-columns: 1fr 2fr; gap: 70px; }
+    .about-title { font-size: clamp(36px, 5vw, 70px); line-height: 1.05; letter-spacing: -3px; }
+    .about-text { font-size: 22px; max-width: 760px; }
+    .keywords { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 30px; }
+    .keyword { padding: 9px 14px; border-radius: 100px; background: #171717; color: #fff8ef; font-size: 13px; }
+
+    .interest-grid, .project-grid {
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px;
+    }
+    .interest {
+      min-height: 230px; padding: 28px;
+      border: 1px solid #171717; border-radius: 22px;
+      display: flex; flex-direction: column; justify-content: space-between;
+      transition: transform .25s ease, background .25s ease;
+    }
+    .interest:hover { transform: translateY(-7px); background: #fff; }
+    .interest .num { font-size: 13px; }
+    .interest h3 { font-size: 34px; letter-spacing: -2px; }
+    .interest p { color: #555; }
+
+    #projects { background: #171717; color: #fff8ef; }
+    .project {
+      min-height: 320px; border: 1px solid #666; border-radius: 22px;
+      padding: 28px; cursor: pointer; position: relative;
+      display: flex; flex-direction: column; justify-content: space-between;
+      transition: .25s ease;
+    }
+    .project:hover { transform: translateY(-8px); background: #292929; }
+    .project .type { font-size: 12px; color: #aaa; }
+    .project h3 { font-size: 34px; line-height: 1.05; letter-spacing: -2px; }
+    .project p { color: #bbb; }
+    .arrow { position: absolute; right: 25px; top: 20px; font-size: 28px; }
+
+    .contact {
+      min-height: 65vh; display: flex; flex-direction: column; justify-content: center;
+    }
+    .contact h2 { font-size: clamp(52px, 8vw, 110px); line-height: .95; letter-spacing: -5px; }
+    .contact p { margin-top: 30px; font-size: 18px; }
+    .links { display: flex; gap: 12px; margin-top: 25px; flex-wrap: wrap; }
+    .links a {
+      color: #171717; text-decoration: none; border: 1px solid #171717;
+      padding: 10px 16px; border-radius: 100px; font-weight: 700;
+    }
+    .links a:hover { background: #171717; color: #fff8ef; }
+    footer { padding: 25px 7%; display: flex; justify-content: space-between; font-size: 12px; border-top: 1px solid rgba(0,0,0,.12); }
+
+    .reveal { opacity: 0; transform: translateY(30px); transition: .7s ease; }
+    .reveal.show { opacity: 1; transform: translateY(0); }
+
+    @media (max-width: 800px) {
+      nav { gap: 12px; }
+      nav a:nth-child(2) { display: none; }
+      h1, .contact h2 { letter-spacing: -3px; }
+      .about-grid, .interest-grid, .project-grid { grid-template-columns: 1fr; }
+      .about-grid { gap: 30px; }
+      .about-text { font-size: 18px; }
+      .scroll { display: none; }
+    }
+  
+    /* Pastel vintage paper, print and scrapbook details */
+    body::before {
+      content:""; position:fixed; inset:0; pointer-events:none; z-index:30;
+      opacity:.14; background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.7' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.36'/%3E%3C/svg%3E");
+    }
+    .logo, .section-label, .tag, .num, .type { letter-spacing: .13em; }
+    .logo { font-family: Georgia, serif; font-style:italic; }
+    h1, .about-title, .contact h2 { font-family: Georgia, "Times New Roman", serif; font-weight: 700; }
+    .hero { background: radial-gradient(circle at 83% 35%, #f7d6a5 0%, transparent 37%), #fff7e9; }
+    .hero::after { content:"✳"; position:absolute; right:12%; top:27%; font-size:clamp(90px,16vw,230px); color:#a6cdb7; opacity:.72; transform:rotate(-18deg); }
+    .hero-copy { position:relative; z-index:1; }
+    .tag { background:#d88ca4; color:#ffffff; border-color:#d88ca4; transform:rotate(-2deg); }
+    .interest { background:#f9e3e8; border-radius:4px; box-shadow:5px 6px 0 #c9b9c8; }
+    .interest:nth-child(2) { transform:rotate(1.5deg); background:#d8eedf; }
+    .interest:nth-child(3) { transform:rotate(-1.2deg); background:#e2e1fa; }
+    .interest:hover, .interest:nth-child(2):hover, .interest:nth-child(3):hover { transform:translateY(-8px) rotate(0); }
+    .project { border-radius:3px; border-color:#a7a18e; background:linear-gradient(135deg,#666b81,#484d67); }
+    .project:nth-child(2) { background:linear-gradient(135deg,#746783,#49465d); }
+    .project:nth-child(3) { background:linear-gradient(135deg,#718f89,#465b64); }
+    #projects { background:#45475b; }
+    .keyword { border-radius:2px; background:#8eabc4; }
+    .contact { background:#f4dce8; }
+    .links a { border-radius:3px; }
+    .vintage-stamp { position:absolute; top:130px; right:8%; border:2px dashed #a37d9a; color:#a37d9a; padding:10px 15px; transform:rotate(10deg); font-family:Georgia,serif; font-size:13px; letter-spacing:.14em; }
+    .section-label::before { content:"✦ "; color:#d88ca4; }
+    @media(max-width:800px) { .hero::after { right:3%; top:23%; opacity:.22; } .vintage-stamp { top:105px; right:7%; font-size:10px; } }
+  
+    .hero { background: radial-gradient(circle at 82% 42%, #ffe2ec 0%, transparent 42%), #fff7e9; }
+    .hero::after { content:"✿"; color:#edb8d2; opacity:.4; right:3%; top:35%; }
+    .hero h1 { font-family:Georgia, "Noto Sans KR",serif; font-size:clamp(48px,7vw,96px); letter-spacing:-.055em; line-height:1.17; position:relative; z-index:2; }
+    .hero h1 em { color:#db87a6; font-style:normal; text-shadow:3px 4px 0 #fff; }
+    .heart { color:#df8db5; font-size:.65em; }
+    .hero-copy { font-size:19px; background:rgba(255,255,255,.58); border:2px dashed #efc8d6; padding:18px 24px; border-radius:18px; width:fit-content; }
+    .mascot-pair { position:absolute; right:9%; bottom:13%; width:310px; height:225px; z-index:1; transform:rotate(-6deg); }
+    .mascot { position:absolute; bottom:0; width:155px; height:152px; border:4px solid #786659; border-radius:47% 47% 43% 43%; box-shadow:8px 10px 0 #d6c4b5; }
+    .mascot.bear { background:#d9ad86; left:0; transform:rotate(-9deg); }
+    .mascot.bunny { background:#fff8f8; right:0; transform:rotate(9deg); border-color:#9e8c92; }
+    .mascot .ear { position:absolute; top:-28px; width:48px; height:55px; background:inherit; border:4px solid #786659; border-radius:50%; z-index:-1; }
+    .mascot .ear.left { left:4px; } .mascot .ear.right { right:4px; }
+    .mascot.bunny .ear { top:-73px; width:39px; height:90px; border-color:#9e8c92; border-radius:55%; }
+    .mascot .face { position:absolute; top:55px; left:22px; right:22px; height:48px; background:#f9e7d4; border-radius:50%; }
+    .mascot.bunny .face { background:#fff1f3; }
+    .eye { position:absolute; top:10px; width:9px; height:11px; background:#493b38; border-radius:50%; }
+    .eye.left { left:26px; } .eye.right { right:26px; }
+    .nose { position:absolute; left:50%; top:22px; transform:translateX(-50%); width:13px; height:9px; border-radius:50%; background:#654b46; }
+    .sparkle { position:absolute; top:-38px; left:110px; color:#cf81a5; font-size:32px; white-space:nowrap; }
+    @media(max-width:850px) { .mascot-pair { width:190px; height:145px; right:8%; bottom:6%; transform:scale(.7); transform-origin:bottom right; opacity:.75; } .hero { padding-bottom:240px; } .hero-copy { font-size:16px; } }
+  
+    /* Pastel vintage floral wallpaper, small printed flowers */
+    .hero { background-color:#fff5ed !important; background-image:
+      radial-gradient(circle at 18px 19px,#d79ab0 0 3px,transparent 3.5px),
+      radial-gradient(ellipse 5px 9px at 18px 8px,#f0c8d5 98%,transparent),
+      radial-gradient(ellipse 5px 9px at 18px 30px,#f0c8d5 98%,transparent),
+      radial-gradient(ellipse 9px 5px at 7px 19px,#f0c8d5 98%,transparent),
+      radial-gradient(ellipse 9px 5px at 29px 19px,#f0c8d5 98%,transparent),
+      radial-gradient(circle at 67px 66px,#d6b77d 0 2px,transparent 3px),
+      radial-gradient(ellipse 4px 7px at 67px 57px,#c8d9ba 98%,transparent),
+      radial-gradient(ellipse 4px 7px at 67px 75px,#c8d9ba 98%,transparent);
+      background-size:110px 110px !important;
+    }
+    .hero h1 { display:inline-block; width:fit-content; background:rgba(255,251,245,.9); padding:26px 45px; border:5px double #dcaebc; box-shadow:10px 10px 0 #f2d9d8; transform:rotate(-2deg); font-size:clamp(75px,12vw,160px); }
+    .hero h1 em { color:#b76f8c; }
+    .hero::after { display:none; }
+    @media(max-width:800px) {.hero h1 {padding:20px; font-size:clamp(62px,14vw,100px)} }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="logo">CHAEYOON ♡</div>
+    <nav>
+      <a href="#about">ABOUT</a>
+      <a href="#interests">INTERESTS</a>
+      <a href="#projects">PROJECTS</a>
+      <a href="#contact">CONTACT</a>
+    </nav>
+  </header>
+
+  <main>
+    <section class="hero">
+      <span class="vintage-stamp">MY LITTLE ROOM<br>EST. 2026 ♡</span>
+      <h1><em>김채윤</em></h1>
+      <div class="mascot-pair" aria-label="곰돌이와 토끼 캐릭터"><div class="mascot bear"><i class="ear left"></i><i class="ear right"></i><i class="face"><b class="eye left"></b><b class="eye right"></b><b class="nose"></b></i></div><div class="mascot bunny"><i class="ear left"></i><i class="ear right"></i><i class="face"><b class="eye left"></b><b class="eye right"></b><b class="nose"></b></i></div><span class="sparkle">✿ ♡ ✦</span></div>
+
+      <span class="scroll">SCROLL TO EXPLORE →</span>
+    </section>
+
+    <section id="about">
+      <div class="section-label">01 / ABOUT ME</div>
+      <div class="about-grid reveal">
+        <h2 class="about-title">김채윤</h2>
+        <div>
+          <p class="about-text">
+            직접 경험하고 관찰한 것을 기록하고, 그 안에서 새로운 인사이트를 발견하는 걸 좋아합니다.
+            마케팅과 브랜드를 공부하며 감각적인 아이디어와 데이터 사이를 연결하는 방법을 찾고 있습니다.
+          </p>
+          <div class="keywords">
+            <span class="keyword">BRANDING</span>
+            <span class="keyword">GROWTH</span>
+            <span class="keyword">CONTENT</span>
+            <span class="keyword">DATA</span>
+            <span class="keyword">FASHION</span>
+            <span class="keyword">COFFEE</span>
+            <span class="keyword">MUSIC</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="interests">
+      <div class="section-label">02 / WHAT I LIKE</div>
+      <div class="interest-grid reveal">
+        <article class="interest">
+          <span class="num">01</span>
+          <div><h3>Fashion</h3><p>옷과 브랜드가 만드는 취향과 문화를 관찰합니다.</p></div>
+        </article>
+        <article class="interest">
+          <span class="num">02</span>
+          <div><h3>Coffee</h3><p>오랫동안 가까이한 커피와 공간의 경험을 좋아합니다.</p></div>
+        </article>
+        <article class="interest">
+          <span class="num">03</span>
+          <div><h3>Music</h3><p>상황과 감정에 어울리는 음악을 발견하고 큐레이션합니다.</p></div>
+        </article>
+      </div>
+    </section>
+
+    <section id="projects">
+      <div class="section-label">03 / PROJECTS</div>
+      <div class="project-grid reveal">
+        <article class="project" data-name="SPAO UGC">
+          <span class="arrow">↗</span><span class="type">BRAND / UGC</span>
+          <div><h3>SPAO<br>UGC Strategy</h3><p>패션 숏폼 소비자를 중심으로 고객 참여형 콘텐츠 전략을 기획했습니다.</p></div>
+        </article>
+        <article class="project" data-name="42PICK">
+          <span class="arrow">↗</span><span class="type">LIVE COMMERCE</span>
+          <div><h3>42PICK</h3><p>상품 발굴부터 콘텐츠와 라이브까지 연결하는 커머스 프로젝트입니다.</p></div>
+        </article>
+        <article class="project" data-name="Playlist">
+          <span class="arrow">↗</span><span class="type">CONTENT</span>
+          <div><h3>Playlist<br>Curation</h3><p>음악을 발견하고 상황과 감정에 맞게 큐레이션한 콘텐츠를 운영했습니다.</p></div>
+        </article>
+      </div>
+    </section>
+
+    <section id="contact" class="contact">
+      <div class="section-label">04 / CONTACT</div>
+      <div class="reveal">
+        <h2>Come over<br>to my house.</h2>
+        <p>재미있는 브랜드와 콘텐츠 이야기는 언제든 환영합니다.</p>
+        <div class="links">
+          <a href="#" onclick="comingSoon(event)">BLOG ↗</a>
+          <a href="#" onclick="comingSoon(event)">INSTAGRAM ↗</a>
+          <a href="#" onclick="comingSoon(event)">EMAIL ↗</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <span>© 2026 KIM CHAEYOON</span>
+    <span>MADE WITH CURIOSITY</span>
+  </footer>
+
+  <script>
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) entry.target.classList.add("show");
+      });
+    }, { threshold: 0.15 });
+
+    document.querySelectorAll(".reveal").forEach(el => observer.observe(el));
+
+    document.querySelectorAll(".project").forEach(card => {
+      card.addEventListener("click", () => {
+        alert(card.dataset.name + " 프로젝트 상세 페이지는 준비 중입니다 :)");
+      });
+    });
+
+    function comingSoon(event) {
+      event.preventDefault();
+      alert("링크를 추가하면 바로 연결할 수 있어요!");
+    }
+  </script>
+</body>
+</html>
